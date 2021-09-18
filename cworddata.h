@@ -1,3 +1,9 @@
+/*
+ * 定义单词的基本数据
+ * Date: 2021.9.17
+ * Last update: 2021.9.18
+ * Author: syc
+*/
 #ifndef CWORDDATA_H
 #define CWORDDATA_H
 #include <QString>
@@ -18,6 +24,11 @@ public:
     QDateTime getCreateTime() {return mCreateTime;}
     qint32 getTotalCount() {return mTotalCount;}
     qint32 getErrorCount() {return mErrorCount;}
+    void setKey(QString aKey) {mKey = aKey;}
+    void setTranslation(QString aTranslation) {mTranslation = aTranslation;}
+    void setCreateTime(QDateTime aCreateTime) {mCreateTime = aCreateTime;}
+    void setTotalCount(qint32 aTotalCount) {mTotalCount = aTotalCount;}
+    void setErrorCount(qint32 aErrorCount) {mErrorCount = aErrorCount;}
 };
 
 #endif // CWORDDATA_H
