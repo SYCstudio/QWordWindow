@@ -20,7 +20,7 @@ public:
     void parseFromJson(QJsonArray aJarray);
     QJsonArray parseToJson();
     void append(CWordData aData);
-    QVector<CWordData> getWordList() {return mWordList;}
+    QVector<CWordData>& getWordList() {return mWordList;}
     int getSize() {return mWordList.size();}
 };
 

@@ -26,3 +26,18 @@ QJsonObject CWordData::parseToJson()
     ret["error_count"] = mErrorCount;
     return ret;
 }
+
+bool CWordData::cmpByKey(CWordData a, CWordData b)
+{
+    return a.getKey() < b.getKey();
+}
+
+bool CWordData::cmpByTotalCount(CWordData a, CWordData b)
+{
+    return a.getTotalCount() < b.getTotalCount();
+}
+
+bool CWordData::cmpByRating(CWordData a, CWordData b)
+{
+    return a.getErrorCount() * b.getTotalCount() < b.getErrorCount() * a.getTotalCount();
+}

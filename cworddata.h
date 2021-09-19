@@ -29,6 +29,9 @@ public:
     void setCreateTime(QDateTime aCreateTime) {mCreateTime = aCreateTime;}
     void setTotalCount(qint32 aTotalCount) {mTotalCount = aTotalCount;}
     void setErrorCount(qint32 aErrorCount) {mErrorCount = aErrorCount;}
+    static bool cmpByKey(CWordData a, CWordData b);
+    static bool cmpByTotalCount(CWordData a, CWordData b);
+    static bool cmpByRating(CWordData a, CWordData b);
 };
 
 #endif // CWORDDATA_H

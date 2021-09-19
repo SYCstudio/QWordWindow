@@ -23,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(mExitButton, SIGNAL(clicked()), this, SLOT(leaveApp()));
     connect(mAddNewWordButton, SIGNAL(clicked()), this, SLOT(addNewWord()));
+    connect(mStartButton, SIGNAL(clicked()), this, SLOT(startNewPractice()));
 
     loadData();
 }
@@ -88,5 +89,28 @@ void MainWindow::addNewWord()
         mWordDataSet.append(data);
     }
     delete dialog;
+    return;
+}
+
+void MainWindow::startNewPractice()
+{
+    QVector<CWordData> &data = mWordDataSet.getWordList();
+    qSort(data.begin(), data.end(), CWordData::cmpByTotalCount);
+    const int num = 15;
+    CRandomQueue<int> queue;
+    for (int i = 0; i < num && i < data.size(); i++) queue.append(i);
+    while (!queue.isEmpty()) {
+        int id = queue.pop();
+        CPracticeDialog *dialog;
+        dialog = new CPracticeDialog(this, &data[id]);
+        int ret = dialog->exec();
+        delete dialog;
+        if (ret == QDialog::Rejected) return;
+        data[id].setTotalCount(data[id].getTotalCount() + 1);
+        if (ret == 3) {
+            data[id].setErrorCount(data[id].getErrorCount() + 1);
+            queue.append(id);
+        }
+    }
     return;
 }

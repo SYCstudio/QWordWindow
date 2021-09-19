@@ -10,6 +10,8 @@ CONFIG += c++11
 
 SOURCES += \
     caddnewworddialog.cpp \
+    cpracticedialog.cpp \
+    crandomqueue.cpp \
     cworddata.cpp \
     cworddataset.cpp \
     main.cpp \
@@ -17,6 +19,8 @@ SOURCES += \
 
 HEADERS += \
     caddnewworddialog.h \
+    cpracticedialog.h \
+    crandomqueue.h \
     cworddata.h \
     cworddataset.h \
     mainwindow.h

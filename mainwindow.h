@@ -16,6 +16,8 @@
 #include <QApplication>
 #include "cworddataset.h"
 #include "caddnewworddialog.h"
+#include "crandomqueue.h"
+#include "cpracticedialog.h"
 
 class MainWindow : public QWidget
 {
@@ -34,5 +36,6 @@ public:
 private slots:
     void leaveApp();
     void addNewWord();
+    void startNewPractice();
 };
 #endif // MAINWINDOW_H
