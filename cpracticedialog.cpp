@@ -5,56 +5,64 @@ CPracticeDialog::CPracticeDialog(QWidget *parent, CWordData *aWorddata)
 {
     mLayout = new QGridLayout();
     mOkButton = new QPushButton();
-    mTipsButton = new QPushButton();
+    mForgetButton = new QPushButton();
     mQuitButton = new QPushButton();
+    mShowButton = new QPushButton();
     mKeyLabel = new QLabel();
     mTranslationLabel = new QLabel();
 
     mOkButton->setText(tr("ok"));
-    mTipsButton->setText(tr("tips"));
+    mForgetButton->setText(tr("forget"));
     mQuitButton->setText(tr("quit"));
+    mShowButton->setText(tr("show"));
 
     mKeyLabel->setText(mWorddata->getKey());
     mKeyLabel->setStyleSheet("font-size: 25px; font-family: Ubuntu Mono;");
     mTranslationLabel->setText(mWorddata->getTranslation());
     mTranslationLabel->setVisible(false);
 
-    mLayout->addWidget(mKeyLabel, 0, 0, 1, 3);
-    mLayout->addWidget(mTranslationLabel, 1, 0, 1, 3);
-    mLayout->addWidget(mOkButton, 2, 0);
-    mLayout->addWidget(mTipsButton,2, 1);
-    mLayout->addWidget(mQuitButton, 2, 2);
+    mLayout->addWidget(mKeyLabel, 0, 0, 1, 4);
+    mLayout->addWidget(mTranslationLabel, 1, 0, 1, 4);
+    mLayout->addWidget(mShowButton, 2, 0);
+    mLayout->addWidget(mOkButton, 2, 1);
+    mLayout->addWidget(mForgetButton,2, 2);
+    mLayout->addWidget(mQuitButton, 2, 3);
     setLayout(mLayout);
 
     connect(mOkButton, SIGNAL(clicked()), this, SLOT(okButtonClicked()));
-    connect(mTipsButton, SIGNAL(clicked()), this, SLOT(tipsButtonClicked()));
+    connect(mForgetButton, SIGNAL(clicked()), this, SLOT(forgetButtonClicked()));
     connect(mQuitButton, SIGNAL(clicked()), this, SLOT(quitButtonClicked()));
+    connect(mShowButton, SIGNAL(clicked()), this, SLOT(showTranslation()));
 }
 
 CPracticeDialog::~CPracticeDialog()
 {
     delete mOkButton;
-    delete mTipsButton;
+    delete mForgetButton;
     delete mQuitButton;
     delete mKeyLabel;
     delete mTranslationLabel;
     delete mLayout;
+    delete mShowButton;
 }
 
 void CPracticeDialog::okButtonClicked()
 {
-    if (isShowtips) done(3);
-    else done(QDialog::Accepted);
+    done(QDialog::Accepted);
 }
 
-void CPracticeDialog::tipsButtonClicked()
+void CPracticeDialog::forgetButtonClicked()
 {
-    isShowtips = true;
-    mTranslationLabel->setVisible(true);
-    mTipsButton->setEnabled(false);
+    done(3);
 }
 
 void CPracticeDialog::quitButtonClicked()
 {
     done(QDialog::Rejected);
+}
+
+void CPracticeDialog::showTranslation()
+{
+    mTranslationLabel->setVisible(true);
+    mShowButton->setEnabled(false);
 }

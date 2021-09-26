@@ -11,7 +11,7 @@ class CPracticeDialog : public QDialog
 {
     Q_OBJECT
     CWordData *mWorddata;
-    QPushButton *mOkButton, *mTipsButton, *mQuitButton;
+    QPushButton *mOkButton, *mForgetButton, *mQuitButton, *mShowButton;
     QLabel *mKeyLabel, *mTranslationLabel;
     QGridLayout *mLayout;
     bool isShowtips;
@@ -20,8 +20,9 @@ public:
     ~CPracticeDialog();
 private slots:
     void okButtonClicked();
-    void tipsButtonClicked();
+    void forgetButtonClicked();
     void quitButtonClicked();
+    void showTranslation();
 };
 
 #endif // CPRACTICEDIALOG_H
