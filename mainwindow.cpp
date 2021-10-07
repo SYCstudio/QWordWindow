@@ -93,7 +93,7 @@ void MainWindow::addNewWord()
 
 void MainWindow::startNewPractice()
 {
-    CRandomQueue<CWordData*> queue = mWordDataSet.getWordsByArg(0, 0, 0);
+    CRandomQueue<CWordData*> queue = mWordDataSet.getWordsByArg(0, 0, 0), bp = queue;
     while (!queue.isEmpty()) {
         CWordData* p = queue.pop();
         CPracticeDialog *dialog;
@@ -106,6 +106,11 @@ void MainWindow::startNewPractice()
             p->setErrorCount(p->getErrorCount() + 1);
             queue.append(p);
         }
+    }
+    while (!bp.isEmpty()) {
+        CWordData *p = bp.pop();
+        p->setLastTime(QDateTime::currentDateTime());
+        p->setPracticeTime(p->getPracticeCount() + 1);
     }
     return;
 }
