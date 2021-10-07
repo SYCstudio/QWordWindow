@@ -37,12 +37,32 @@ bool CWordData::cmpByKey(CWordData a, CWordData b)
     return a.getKey() < b.getKey();
 }
 
-bool CWordData::cmpByTotalCount(CWordData a, CWordData b)
+bool CWordData::cmpByPracticeTime(CWordData a, CWordData b)
 {
-    return a.getTotalCount() < b.getTotalCount();
+    return cmpByPracticeTimep(&a, &b);
 }
 
-bool CWordData::cmpByRating(CWordData a, CWordData b)
+bool CWordData::cmpByErrorRate(CWordData a, CWordData b)
 {
-    return a.getErrorCount() * b.getTotalCount() < b.getErrorCount() * a.getTotalCount();
+    return cmpByErrorRatep(&a, &b);
+}
+
+bool CWordData::cmpByPracticeTimep(CWordData *a, CWordData *b)
+{
+    return a->getPracticeCount() < b->getPracticeCount();
+}
+
+bool CWordData::cmpByErrorRatep(CWordData *a, CWordData *b)
+{
+    return a->getErrorCount() * b->getTotalCount() > b->getErrorCount() * a->getTotalCount();
+}
+
+bool CWordData::cmpByLastDatep(CWordData *a, CWordData *b)
+{
+    return a->getLastTime() > b->getLastTime();
+}
+
+bool CWordData::cmpByLastDate(CWordData a, CWordData b)
+{
+    return cmpByLastDatep(&a, &b);
 }

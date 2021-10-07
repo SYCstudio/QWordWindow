@@ -11,6 +11,8 @@
 #include <QJsonArray>
 #include <QDebug>
 #include <QMap>
+#include <QSet>
+#include <algorithm>
 #include "cworddata.h"
 #include "crandomqueue.h"
 

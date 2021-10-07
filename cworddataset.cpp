@@ -41,7 +41,18 @@ void CWordDataSet::append(CWordData *data)
 
 CRandomQueue<CWordData*> CWordDataSet::getWordsByArg(int aNew, int aError, int aPast)
 {
+    QVector<CWordData*> vec;
+    QSet<QString> set;
+    for (auto it : mWordMap) vec.append(it);
+    int size = vec.size();
+    qSort(vec.begin(), vec.end(),CWordData::cmpByPracticeTimep);
+    for (int i = 0; i < size && i < aNew; i++) set.insert(vec[i]->getKey());
+    qSort(vec.begin(), vec.end(), CWordData::cmpByErrorRatep);
+    for (int i = 0; i < size && i < aError; i++) set.insert(vec[i]->getKey());
+    qSort(vec.begin(), vec.end(), CWordData::cmpByLastDatep);
+    for (int i = 0; i < size && i < aPast; i++) set.insert(vec[i]->getKey());
+
     CRandomQueue<CWordData*> ret;
-    for (auto it : mWordMap) ret.append(it);
+    for (auto it : set) ret.append(mWordMap[it]);
     return ret;
 }

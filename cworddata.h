@@ -34,8 +34,12 @@ public:
     void setLastTime(QDateTime aLastTime) {mLastTime = aLastTime;}
     void setPracticeTime(qint32 aPracticeCount) {mPracticeCount = aPracticeCount;}
     static bool cmpByKey(CWordData a, CWordData b);
-    static bool cmpByTotalCount(CWordData a, CWordData b);
-    static bool cmpByRating(CWordData a, CWordData b);
+    static bool cmpByErrorRate(CWordData a, CWordData b);
+    static bool cmpByPracticeTime(CWordData a, CWordData b);
+    static bool cmpByLastDate(CWordData a, CWordData b);
+    static bool cmpByErrorRatep(CWordData *a, CWordData *b);
+    static bool cmpByPracticeTimep(CWordData *a, CWordData *b);
+    static bool cmpByLastDatep(CWordData *a, CWordData *b);
 };
 
 #endif // CWORDDATA_H
