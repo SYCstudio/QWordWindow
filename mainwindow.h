@@ -27,7 +27,8 @@ class MainWindow : public QWidget
 
     QPushButton *mStartButton, *mAddNewWordButton, *mExitButton, *mSettingButton;
     QVBoxLayout *mMainLayout;
-    CWordDataSet mWordDataSet;
+    //CWordDataSet mWordDataSet;
+    //QMap<QString, CWordDataSet*> mDataSet;
     static const QString cWordsDataFileName;
     static const QString cSettingFileName;
 

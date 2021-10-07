@@ -57,7 +57,20 @@ void MainWindow::loadData()
         return;
     }
     //qDebug() << doc.isArray();
-    mWordDataSet.parseFromJson(doc.array());
+    //mWordDataSet.parseFromJson(doc.array());
+
+    QMap<QString, CWordDataSet*>* wordsbooks = SGlobalSetting::getInstance()->getDataset();
+
+    QJsonArray arr = doc.array();
+    int size = arr.size();
+    for (int i = 0; i < size; i++) {
+        QJsonObject obj = arr[i].toObject();
+        QString name = obj["name"].toString();
+        CWordDataSet *dataset;
+        dataset = new CWordDataSet();
+        dataset->parseFromJson(obj["dataset"].toArray());
+        wordsbooks->insert(name, dataset);
+    }
     reader.close();
     return;
 }
@@ -69,8 +82,18 @@ void MainWindow::saveData()
         qDebug() << "can't write file";
         return;
     }
+    QJsonArray arr;
+    QMap<QString, CWordDataSet*>* wordsbooks = SGlobalSetting::getInstance()->getDataset();
+    for (QMap<QString, CWordDataSet*>::iterator it = wordsbooks->begin(); it != wordsbooks->end(); it++) {
+        QString name = it.key();
+        CWordDataSet *p = it.value();
+        QJsonObject obj;
+        obj["name"] = name;
+        obj["dataset"] = p->parseToJson();
+        arr.append(obj);
+    }
     QJsonDocument doc;
-    doc.setArray(mWordDataSet.parseToJson());
+    doc.setArray(arr);
     writer.write(doc.toJson());
     writer.close();
     return;
@@ -92,7 +115,9 @@ void MainWindow::addNewWord()
     int result = dialog->exec();
     qDebug() << result;
     if (result == QDialog::Accepted && !data -> getKey().isEmpty()) {
-        mWordDataSet.append(data);
+        QMap<QString, CWordDataSet*>* wordsbooks = SGlobalSetting::getInstance()->getDataset();
+        QString name = SGlobalSetting::getInstance()->getCurrentDataset();
+        wordsbooks->find(name).value()->append(data);
     }
     delete dialog;
     return;
@@ -100,7 +125,8 @@ void MainWindow::addNewWord()
 
 void MainWindow::startNewPractice()
 {
-    CRandomQueue<CWordData*> queue = mWordDataSet.getWordsByArg(
+    CRandomQueue<CWordData*> queue = SGlobalSetting::getInstance()->getDataset()
+            ->find(SGlobalSetting::getInstance()->getCurrentDataset()).value()->getWordsByArg(
                 SGlobalSetting::getInstance()->getNewAmount(),
                 SGlobalSetting::getInstance()->getErrorAmount(),
                 SGlobalSetting::getInstance()->getLastAmount()),
@@ -139,7 +165,7 @@ void MainWindow::loadSetting()
         qDebug() << "parse error";
         return;
     }
-    SGlobalSetting::init(doc.object());
+    SGlobalSetting::initSetting(doc.object());
     reader.close();
     return;
 }
