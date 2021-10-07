@@ -84,9 +84,7 @@ void MainWindow::addNewWord()
     int result = dialog->exec();
     qDebug() << result;
     if (result == QDialog::Accepted && !data -> getKey().isEmpty()) {
-        data->setCreateTime(QDateTime::currentDateTime());
-        data->setTotalCount(0);
-        data->setErrorCount(0);
+
         mWordDataSet.append(data);
     }
     delete dialog;

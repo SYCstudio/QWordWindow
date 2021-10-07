@@ -13,8 +13,8 @@
 class CWordData
 {
     QString mKey, mTranslation;
-    QDateTime mCreateTime;
-    qint32 mTotalCount, mErrorCount;
+    QDateTime mCreateTime, mLastTime;
+    qint32 mTotalCount, mErrorCount, mPracticeCount;
 public:
     CWordData();
     void parseFromJson(QJsonObject aObject);
@@ -24,11 +24,15 @@ public:
     QDateTime getCreateTime() {return mCreateTime;}
     qint32 getTotalCount() {return mTotalCount;}
     qint32 getErrorCount() {return mErrorCount;}
+    QDateTime getLastTime() {return mLastTime;}
+    qint32 getPracticeCount() {return mPracticeCount;}
     void setKey(QString aKey) {mKey = aKey;}
     void setTranslation(QString aTranslation) {mTranslation = aTranslation;}
     void setCreateTime(QDateTime aCreateTime) {mCreateTime = aCreateTime;}
     void setTotalCount(qint32 aTotalCount) {mTotalCount = aTotalCount;}
     void setErrorCount(qint32 aErrorCount) {mErrorCount = aErrorCount;}
+    void setLastTime(QDateTime aLastTime) {mLastTime = aLastTime;}
+    void setPracticeTime(qint32 aPracticeCount) {mPracticeCount = aPracticeCount;}
     static bool cmpByKey(CWordData a, CWordData b);
     static bool cmpByTotalCount(CWordData a, CWordData b);
     static bool cmpByRating(CWordData a, CWordData b);

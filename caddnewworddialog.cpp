@@ -44,6 +44,11 @@ void CAddNewWordDialog::okButtonClicked()
 {
     mWordData->setKey(mKeyEdit->text());
     mWordData->setTranslation(mTranslationEdit->text());
+    mWordData->setCreateTime(QDateTime::currentDateTime());
+    mWordData->setTotalCount(0);
+    mWordData->setErrorCount(0);
+    mWordData->setLastTime(QDateTime::currentDateTime());
+    mWordData->setPracticeTime(0);
     done(QDialog::Accepted);
 }
 
