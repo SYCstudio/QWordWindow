@@ -7,6 +7,7 @@
 #include <QPushButton>
 #include <QLineEdit>
 #include <QLabel>
+#include <QPlainTextEdit>
 #include "cworddata.h"
 
 class CAddNewWordDialog : public QDialog
@@ -15,7 +16,8 @@ class CAddNewWordDialog : public QDialog
     CWordData *mWordData;
     QPushButton *mOkButton, *mCancelButton;
     QLabel *mKeyLabel, *mTranslationLabel;
-    QLineEdit *mKeyEdit, *mTranslationEdit;
+    QLineEdit *mKeyEdit;
+    QPlainTextEdit *mTranslationEdit;
     QGridLayout *mLayout;
 public:
     CAddNewWordDialog(QWidget *parrent, CWordData *aWordData);

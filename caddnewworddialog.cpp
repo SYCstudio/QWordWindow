@@ -7,7 +7,7 @@ CAddNewWordDialog::CAddNewWordDialog(QWidget *parrent, CWordData *aWordData)
     mKeyLabel = new QLabel();
     mKeyEdit = new QLineEdit();
     mTranslationLabel = new QLabel();
-    mTranslationEdit = new QLineEdit();
+    mTranslationEdit = new QPlainTextEdit();
     mOkButton = new QPushButton();
     mCancelButton = new QPushButton();
 
@@ -43,7 +43,7 @@ CAddNewWordDialog::~CAddNewWordDialog()
 void CAddNewWordDialog::okButtonClicked()
 {
     mWordData->setKey(mKeyEdit->text());
-    mWordData->setTranslation(mTranslationEdit->text());
+    mWordData->setTranslation(mTranslationEdit->toPlainText());
     mWordData->setCreateTime(QDateTime::currentDateTime());
     mWordData->setTotalCount(0);
     mWordData->setErrorCount(0);
