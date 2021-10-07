@@ -77,15 +77,16 @@ void MainWindow::leaveApp()
 
 void MainWindow::addNewWord()
 {
-    CWordData data;
+    CWordData *data;
     CAddNewWordDialog *dialog;
-    dialog = new CAddNewWordDialog(this, &data);
+    data = new CWordData();
+    dialog = new CAddNewWordDialog(this, data);
     int result = dialog->exec();
     qDebug() << result;
-    if (result == QDialog::Accepted && !data.getKey().isEmpty()) {
-        data.setCreateTime(QDateTime::currentDateTime());
-        data.setTotalCount(0);
-        data.setErrorCount(0);
+    if (result == QDialog::Accepted && !data -> getKey().isEmpty()) {
+        data->setCreateTime(QDateTime::currentDateTime());
+        data->setTotalCount(0);
+        data->setErrorCount(0);
         mWordDataSet.append(data);
     }
     delete dialog;
@@ -94,22 +95,18 @@ void MainWindow::addNewWord()
 
 void MainWindow::startNewPractice()
 {
-    QVector<CWordData> &data = mWordDataSet.getWordList();
-    qSort(data.begin(), data.end(), CWordData::cmpByTotalCount);
-    const int num = 15;
-    CRandomQueue<int> queue;
-    for (int i = 0; i < num && i < data.size(); i++) queue.append(i);
+    CRandomQueue<CWordData*> queue = mWordDataSet.getWordsByArg(0, 0, 0);
     while (!queue.isEmpty()) {
-        int id = queue.pop();
+        CWordData* p = queue.pop();
         CPracticeDialog *dialog;
-        dialog = new CPracticeDialog(this, &data[id]);
+        dialog = new CPracticeDialog(this, p);
         int ret = dialog->exec();
         delete dialog;
         if (ret == QDialog::Rejected) return;
-        data[id].setTotalCount(data[id].getTotalCount() + 1);
+        p->setTotalCount(p->getTotalCount() + 1);
         if (ret == 3) {
-            data[id].setErrorCount(data[id].getErrorCount() + 1);
-            queue.append(id);
+            p->setErrorCount(p->getErrorCount() + 1);
+            queue.append(p);
         }
     }
     return;

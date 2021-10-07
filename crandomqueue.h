@@ -19,7 +19,7 @@ public:
     }
     T get() {
         int pos = qrand() % mArray.size();
-        int tmp = mArray[pos];
+        T tmp = mArray[pos];
         mArray[pos] = mArray.back();
         mArray.back() = tmp;
         return mArray.back();

@@ -10,18 +10,23 @@
 #include <QVector>
 #include <QJsonArray>
 #include <QDebug>
+#include <QMap>
 #include "cworddata.h"
+#include "crandomqueue.h"
 
 class CWordDataSet
 {
-    QVector<CWordData> mWordList;
+    //QVector<CWordData> mWordList;
+    QMap<QString, CWordData*> mWordMap;
 public:
     CWordDataSet();
     void parseFromJson(QJsonArray aJarray);
     QJsonArray parseToJson();
-    void append(CWordData aData);
-    QVector<CWordData>& getWordList() {return mWordList;}
-    int getSize() {return mWordList.size();}
+    void append(CWordData *aData);
+    CRandomQueue<CWordData*> getWordsByArg(int aNew, int aError, int aPast);
+    int getSize() {return mWordMap.size();}
+    CWordData* getWordByName(QString aName);
+    ~CWordDataSet();
 };
 
 #endif // CWORDDATASET_H
