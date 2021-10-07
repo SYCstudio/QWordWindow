@@ -12,6 +12,7 @@ SOURCES += \
     caddnewworddialog.cpp \
     cpracticedialog.cpp \
     crandomqueue.cpp \
+    csettingdialog.cpp \
     cworddata.cpp \
     cworddataset.cpp \
     main.cpp \
@@ -22,6 +23,7 @@ HEADERS += \
     caddnewworddialog.h \
     cpracticedialog.h \
     crandomqueue.h \
+    csettingdialog.h \
     cworddata.h \
     cworddataset.h \
     mainwindow.h \

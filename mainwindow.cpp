@@ -10,13 +10,16 @@ MainWindow::MainWindow(QWidget *parent)
     mStartButton = new QPushButton();
     mAddNewWordButton = new QPushButton();
     mExitButton = new QPushButton();
+    mSettingButton = new QPushButton();
 
     mStartButton -> setText(tr("start"));
     mAddNewWordButton -> setText(tr("add"));
     mExitButton -> setText(tr("exit"));
+    mSettingButton -> setText(tr("setting"));
 
     mMainLayout->addWidget(mStartButton);
     mMainLayout->addWidget(mAddNewWordButton);
+    mMainLayout->addWidget(mSettingButton);
     mMainLayout->addWidget(mExitButton);
     setLayout(mMainLayout);
 
@@ -25,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(mExitButton, SIGNAL(clicked()), this, SLOT(leaveApp()));
     connect(mAddNewWordButton, SIGNAL(clicked()), this, SLOT(addNewWord()));
     connect(mStartButton, SIGNAL(clicked()), this, SLOT(startNewPractice()));
+    connect(mSettingButton, SIGNAL(clicked()), this, SLOT(setting()));
 
     loadData();
     loadSetting();
@@ -36,6 +40,7 @@ MainWindow::~MainWindow()
     delete mStartButton;
     delete mAddNewWordButton;
     delete mExitButton;
+    delete mSettingButton;
 }
 
 void MainWindow::loadData()
@@ -150,5 +155,14 @@ void MainWindow::saveSetting()
     doc.setObject(SGlobalSetting::getInstance() -> parseToJson());
     writer.write(doc.toJson());
     writer.close();
+    return;
+}
+
+void MainWindow::setting()
+{
+    CSettingDialog *dialog;
+    dialog = new CSettingDialog(this);
+    int ret = dialog->exec();
+    delete dialog;
     return;
 }

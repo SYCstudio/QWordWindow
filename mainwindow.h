@@ -19,12 +19,13 @@
 #include "crandomqueue.h"
 #include "cpracticedialog.h"
 #include "sglobalsetting.h"
+#include "csettingdialog.h"
 
 class MainWindow : public QWidget
 {
     Q_OBJECT
 
-    QPushButton *mStartButton, *mAddNewWordButton, *mExitButton;
+    QPushButton *mStartButton, *mAddNewWordButton, *mExitButton, *mSettingButton;
     QVBoxLayout *mMainLayout;
     CWordDataSet mWordDataSet;
     static const QString cWordsDataFileName;
@@ -41,5 +42,6 @@ private slots:
     void leaveApp();
     void addNewWord();
     void startNewPractice();
+    void setting();
 };
 #endif // MAINWINDOW_H
