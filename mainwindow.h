@@ -18,6 +18,7 @@
 #include "caddnewworddialog.h"
 #include "crandomqueue.h"
 #include "cpracticedialog.h"
+#include "sglobalsetting.h"
 
 class MainWindow : public QWidget
 {
@@ -27,9 +28,12 @@ class MainWindow : public QWidget
     QVBoxLayout *mMainLayout;
     CWordDataSet mWordDataSet;
     static const QString cWordsDataFileName;
+    static const QString cSettingFileName;
 
     void saveData();
     void loadData();
+    void saveSetting();
+    void loadSetting();
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();

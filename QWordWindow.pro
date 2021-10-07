@@ -15,7 +15,8 @@ SOURCES += \
     cworddata.cpp \
     cworddataset.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    sglobalsetting.cpp
 
 HEADERS += \
     caddnewworddialog.h \
@@ -23,7 +24,8 @@ HEADERS += \
     crandomqueue.h \
     cworddata.h \
     cworddataset.h \
-    mainwindow.h
+    mainwindow.h \
+    sglobalsetting.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

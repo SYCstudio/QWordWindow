@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 
 const QString MainWindow::cWordsDataFileName = "words_data.json";
+const QString MainWindow::cSettingFileName = "setting.json";
 
 MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent)
@@ -26,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(mStartButton, SIGNAL(clicked()), this, SLOT(startNewPractice()));
 
     loadData();
+    loadSetting();
 }
 
 MainWindow::~MainWindow()
@@ -72,6 +74,7 @@ void MainWindow::saveData()
 void MainWindow::leaveApp()
 {
     saveData();
+    saveSetting();
     qApp -> quit();
 }
 
@@ -84,7 +87,6 @@ void MainWindow::addNewWord()
     int result = dialog->exec();
     qDebug() << result;
     if (result == QDialog::Accepted && !data -> getKey().isEmpty()) {
-
         mWordDataSet.append(data);
     }
     delete dialog;
@@ -93,7 +95,11 @@ void MainWindow::addNewWord()
 
 void MainWindow::startNewPractice()
 {
-    CRandomQueue<CWordData*> queue = mWordDataSet.getWordsByArg(0, 0, 0), bp = queue;
+    CRandomQueue<CWordData*> queue = mWordDataSet.getWordsByArg(
+                SGlobalSetting::getInstance()->getNewAmount(),
+                SGlobalSetting::getInstance()->getErrorAmount(),
+                SGlobalSetting::getInstance()->getLastAmount()),
+            bp = queue;
     while (!queue.isEmpty()) {
         CWordData* p = queue.pop();
         CPracticeDialog *dialog;
@@ -112,5 +118,37 @@ void MainWindow::startNewPractice()
         p->setLastTime(QDateTime::currentDateTime());
         p->setPracticeTime(p->getPracticeCount() + 1);
     }
+    return;
+}
+
+void MainWindow::loadSetting()
+{
+    QFile reader(cSettingFileName);
+    if (!reader.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qDebug() << "can't find file";
+        return;
+    }
+    QJsonParseError errorTag;
+    QJsonDocument doc = QJsonDocument::fromJson(reader.readAll(), &errorTag);
+    if (doc.isNull() || errorTag.error != QJsonParseError::NoError) {
+        qDebug() << "parse error";
+        return;
+    }
+    SGlobalSetting::init(doc.object());
+    reader.close();
+    return;
+}
+
+void MainWindow::saveSetting()
+{
+    QFile writer(cSettingFileName);
+    if (!writer.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        qDebug() << "can't write file";
+        return;
+    }
+    QJsonDocument doc;
+    doc.setObject(SGlobalSetting::getInstance() -> parseToJson());
+    writer.write(doc.toJson());
+    writer.close();
     return;
 }
