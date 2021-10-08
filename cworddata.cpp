@@ -54,11 +54,17 @@ bool CWordData::cmpByPracticeTimep(CWordData *a, CWordData *b)
 
 bool CWordData::cmpByErrorRatep(CWordData *a, CWordData *b)
 {
+    if (a->getPracticeCount() == 0 || b->getPracticeCount() == 0){
+        return a->getPracticeCount() > b->getPracticeCount();
+    }
     return a->getErrorCount() * b->getTotalCount() > b->getErrorCount() * a->getTotalCount();
 }
 
 bool CWordData::cmpByLastDatep(CWordData *a, CWordData *b)
 {
+    if (a->getPracticeCount() == 0 || b->getPracticeCount() == 0){
+        return a->getPracticeCount() > b->getPracticeCount();
+    }
     return a->getLastTime() > b->getLastTime();
 }
 
