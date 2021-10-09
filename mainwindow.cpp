@@ -17,6 +17,9 @@ MainWindow::MainWindow(QWidget *parent)
     mExitButton -> setText(tr("exit"));
     mSettingButton -> setText(tr("setting"));
 
+    mInfoLabel = new QLabel();
+
+    mMainLayout->addWidget(mInfoLabel);
     mMainLayout->addWidget(mStartButton);
     mMainLayout->addWidget(mAddNewWordButton);
     mMainLayout->addWidget(mSettingButton);
@@ -32,6 +35,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     loadData();
     loadSetting();
+    refreshInfo();
 }
 
 MainWindow::~MainWindow()
@@ -41,6 +45,7 @@ MainWindow::~MainWindow()
     delete mAddNewWordButton;
     delete mExitButton;
     delete mSettingButton;
+    delete mInfoLabel;
 }
 
 void MainWindow::loadData()
@@ -120,6 +125,7 @@ void MainWindow::addNewWord()
         wordsbooks->find(name).value()->append(data);
     }
     delete dialog;
+    refreshInfo();
     return;
 }
 
@@ -149,6 +155,7 @@ void MainWindow::startNewPractice()
         p->setLastTime(QDateTime::currentDateTime());
         p->setPracticeTime(p->getPracticeCount() + 1);
     }
+    refreshInfo();
     return;
 }
 
@@ -190,5 +197,17 @@ void MainWindow::setting()
     dialog = new CSettingDialog(this);
     int ret = dialog->exec();
     delete dialog;
+    refreshInfo();
+    return;
+}
+
+void MainWindow::refreshInfo()
+{
+    QString name = SGlobalSetting::getInstance()->getCurrentDataset();
+    auto p = SGlobalSetting::getInstance()->getDataset()->find(name).value();
+    int unlearned = p->getUnLearnedAmount();
+    int total = p->getSize();
+    QString label = name + ":" + QString::number(total - unlearned) + "/" + QString::number(total);
+    mInfoLabel->setText(label);
     return;
 }

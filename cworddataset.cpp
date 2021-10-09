@@ -56,3 +56,11 @@ CRandomQueue<CWordData*> CWordDataSet::getWordsByArg(int aNew, int aError, int a
     for (auto it : set) ret.append(mWordMap[it]);
     return ret;
 }
+
+int CWordDataSet::getUnLearnedAmount()
+{
+    int ret = 0;
+    for (auto p : mWordMap)
+        if (p->getPracticeCount() == 0) ret++;
+    return ret;
+}

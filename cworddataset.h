@@ -27,6 +27,7 @@ public:
     void append(CWordData *aData);
     CRandomQueue<CWordData*> getWordsByArg(int aNew, int aError, int aPast);
     int getSize() {return mWordMap.size();}
+    int getUnLearnedAmount();
     CWordData* getWordByName(QString aName);
     ~CWordDataSet();
 };

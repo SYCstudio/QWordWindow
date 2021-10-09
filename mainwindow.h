@@ -25,6 +25,7 @@ class MainWindow : public QWidget
 {
     Q_OBJECT
 
+    QLabel *mInfoLabel;
     QPushButton *mStartButton, *mAddNewWordButton, *mExitButton, *mSettingButton;
     QVBoxLayout *mMainLayout;
     //CWordDataSet mWordDataSet;
@@ -44,5 +45,6 @@ private slots:
     void addNewWord();
     void startNewPractice();
     void setting();
+    void refreshInfo();
 };
 #endif // MAINWINDOW_H
