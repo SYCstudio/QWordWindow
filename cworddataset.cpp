@@ -35,7 +35,8 @@ QJsonArray CWordDataSet::parseToJson()
 
 void CWordDataSet::append(CWordData *data)
 {
-    mWordMap[data->getKey()] = data;
+    if (mWordMap.count(data->getKey()) == 0)
+        mWordMap[data->getKey()] = data;
     return;
 }
 
