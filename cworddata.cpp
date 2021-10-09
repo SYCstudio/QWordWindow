@@ -65,7 +65,7 @@ bool CWordData::cmpByLastDatep(CWordData *a, CWordData *b)
     if (a->getPracticeCount() == 0 || b->getPracticeCount() == 0){
         return a->getPracticeCount() > b->getPracticeCount();
     }
-    return a->getLastTime() > b->getLastTime();
+    return a->getLastTime() < b->getLastTime();
 }
 
 bool CWordData::cmpByLastDate(CWordData a, CWordData b)
