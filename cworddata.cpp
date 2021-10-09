@@ -57,6 +57,9 @@ bool CWordData::cmpByErrorRatep(CWordData *a, CWordData *b)
     if (a->getPracticeCount() == 0 || b->getPracticeCount() == 0){
         return a->getPracticeCount() > b->getPracticeCount();
     }
+    if (a->getErrorCount() == 0 && b->getErrorCount() == 0) {
+        return a->getPracticeCount() < b->getPracticeCount();
+    }
     return a->getErrorCount() * b->getTotalCount() > b->getErrorCount() * a->getTotalCount();
 }
 
