@@ -12,7 +12,7 @@ class CPracticeDialog : public QDialog
     Q_OBJECT
     CWordData *mWorddata;
     QPushButton *mOkButton, *mForgetButton, *mQuitButton, *mShowButton;
-    QLabel *mKeyLabel, *mTranslationLabel;
+    QLabel *mKeyLabel, *mTranslationLabel, *mInfoLabel;
     QGridLayout *mLayout;
     bool isShowtips;
 public:

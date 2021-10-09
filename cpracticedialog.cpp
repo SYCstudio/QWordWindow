@@ -10,6 +10,7 @@ CPracticeDialog::CPracticeDialog(QWidget *parent, CWordData *aWorddata)
     mShowButton = new QPushButton();
     mKeyLabel = new QLabel();
     mTranslationLabel = new QLabel();
+    mInfoLabel = new QLabel();
 
     mOkButton->setText(tr("ok"));
     mForgetButton->setText(tr("forget"));
@@ -18,15 +19,19 @@ CPracticeDialog::CPracticeDialog(QWidget *parent, CWordData *aWorddata)
 
     mKeyLabel->setText(mWorddata->getKey());
     mKeyLabel->setStyleSheet("font-size: 25px; font-family: Ubuntu Mono;");
+    mInfoLabel->setText(mWorddata->getLastTime().toString("yyyy-MM-dd hh:mm:ss") + " ("
+                        + QString::number(mWorddata->getTotalCount() - mWorddata->getErrorCount()) + "/"
+                        + QString::number(mWorddata->getTotalCount()) + ")");
     mTranslationLabel->setText(mWorddata->getTranslation());
     mTranslationLabel->setVisible(false);
 
     mLayout->addWidget(mKeyLabel, 0, 0, 1, 4);
-    mLayout->addWidget(mTranslationLabel, 1, 0, 1, 4);
-    mLayout->addWidget(mShowButton, 2, 0);
-    mLayout->addWidget(mOkButton, 2, 1);
-    mLayout->addWidget(mForgetButton,2, 2);
-    mLayout->addWidget(mQuitButton, 2, 3);
+    mLayout->addWidget(mInfoLabel, 1, 0, 1, 4);
+    mLayout->addWidget(mTranslationLabel, 2, 0, 1, 4);
+    mLayout->addWidget(mShowButton, 3, 0);
+    mLayout->addWidget(mOkButton, 3, 1);
+    mLayout->addWidget(mForgetButton,3, 2);
+    mLayout->addWidget(mQuitButton, 3, 3);
     setLayout(mLayout);
 
     connect(mOkButton, SIGNAL(clicked()), this, SLOT(okButtonClicked()));
