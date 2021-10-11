@@ -17,6 +17,7 @@ public:
     void clear() {
         mArray.empty();
     }
+    int getSize() {return mArray.size();}
     T get() {
         int pos = qrand() % mArray.size();
         T tmp = mArray[pos];

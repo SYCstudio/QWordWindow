@@ -1,6 +1,6 @@
 #include "cpracticedialog.h"
 
-CPracticeDialog::CPracticeDialog(QWidget *parent, CWordData *aWorddata)
+CPracticeDialog::CPracticeDialog(QWidget *parent, CWordData *aWorddata, QString aTitle)
     : QDialog(parent), mWorddata(aWorddata), isShowtips(false)
 {
     mLayout = new QGridLayout();
@@ -33,6 +33,8 @@ CPracticeDialog::CPracticeDialog(QWidget *parent, CWordData *aWorddata)
     mLayout->addWidget(mForgetButton,3, 2);
     mLayout->addWidget(mQuitButton, 3, 3);
     setLayout(mLayout);
+
+    setWindowTitle(aTitle);
 
     connect(mOkButton, SIGNAL(clicked()), this, SLOT(okButtonClicked()));
     connect(mForgetButton, SIGNAL(clicked()), this, SLOT(forgetButtonClicked()));

@@ -16,7 +16,7 @@ class CPracticeDialog : public QDialog
     QGridLayout *mLayout;
     bool isShowtips;
 public:
-    CPracticeDialog(QWidget *parent, CWordData *aWorddata);
+    CPracticeDialog(QWidget *parent, CWordData *aWorddata, QString aTitle);
     ~CPracticeDialog();
 private slots:
     void okButtonClicked();

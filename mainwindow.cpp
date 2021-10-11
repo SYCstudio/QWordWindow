@@ -140,7 +140,9 @@ void MainWindow::startNewPractice()
     while (!queue.isEmpty()) {
         CWordData* p = queue.pop();
         CPracticeDialog *dialog;
-        dialog = new CPracticeDialog(this, p);
+        dialog = new CPracticeDialog(this, p,
+                                     QString::number(bp.getSize() - queue.getSize())
+                                     + "/" + QString::number(bp.getSize()));
         int ret = dialog->exec();
         delete dialog;
         if (ret == QDialog::Rejected) return;
