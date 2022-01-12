@@ -33,9 +33,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(mStartButton, SIGNAL(clicked()), this, SLOT(startNewPractice()));
     connect(mSettingButton, SIGNAL(clicked()), this, SLOT(setting()));
 
-    loadData();
-    loadSetting();
-    refreshInfo();
+    load();
+    return;
 }
 
 MainWindow::~MainWindow()
@@ -48,66 +47,10 @@ MainWindow::~MainWindow()
     delete mInfoLabel;
 }
 
-void MainWindow::loadData()
-{
-    QFile reader(cWordsDataFileName);
-    if (!reader.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug() << "can't find file";
-        return;
-    }
-    QJsonParseError errorTag;
-    QJsonDocument doc = QJsonDocument::fromJson(reader.readAll(), &errorTag);
-    if (doc.isNull() || errorTag.error != QJsonParseError::NoError) {
-        qDebug() << "parse error";
-        return;
-    }
-    //qDebug() << doc.isArray();
-    //mWordDataSet.parseFromJson(doc.array());
-
-    QMap<QString, CWordDataSet*>* wordsbooks = SGlobalSetting::getInstance()->getDataset();
-
-    QJsonArray arr = doc.array();
-    int size = arr.size();
-    for (int i = 0; i < size; i++) {
-        QJsonObject obj = arr[i].toObject();
-        QString name = obj["name"].toString();
-        CWordDataSet *dataset;
-        dataset = new CWordDataSet();
-        dataset->parseFromJson(obj["dataset"].toArray());
-        wordsbooks->insert(name, dataset);
-    }
-    reader.close();
-    return;
-}
-
-void MainWindow::saveData()
-{
-    QFile writer(cWordsDataFileName);
-    if (!writer.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        qDebug() << "can't write file";
-        return;
-    }
-    QJsonArray arr;
-    QMap<QString, CWordDataSet*>* wordsbooks = SGlobalSetting::getInstance()->getDataset();
-    for (QMap<QString, CWordDataSet*>::iterator it = wordsbooks->begin(); it != wordsbooks->end(); it++) {
-        QString name = it.key();
-        CWordDataSet *p = it.value();
-        QJsonObject obj;
-        obj["name"] = name;
-        obj["dataset"] = p->parseToJson();
-        arr.append(obj);
-    }
-    QJsonDocument doc;
-    doc.setArray(arr);
-    writer.write(doc.toJson());
-    writer.close();
-    return;
-}
-
 void MainWindow::leaveApp()
 {
-    saveData();
-    saveSetting();
+    save();
+    SGlobalSetting::getInstance()->exit();
     qApp -> quit();
 }
 
@@ -162,43 +105,11 @@ void MainWindow::startNewPractice()
     return;
 }
 
-void MainWindow::loadSetting()
-{
-    QFile reader(cSettingFileName);
-    if (!reader.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug() << "can't find file";
-        return;
-    }
-    QJsonParseError errorTag;
-    QJsonDocument doc = QJsonDocument::fromJson(reader.readAll(), &errorTag);
-    if (doc.isNull() || errorTag.error != QJsonParseError::NoError) {
-        qDebug() << "parse error";
-        return;
-    }
-    SGlobalSetting::initSetting(doc.object());
-    reader.close();
-    return;
-}
-
-void MainWindow::saveSetting()
-{
-    QFile writer(cSettingFileName);
-    if (!writer.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        qDebug() << "can't write file";
-        return;
-    }
-    QJsonDocument doc;
-    doc.setObject(SGlobalSetting::getInstance() -> parseToJson());
-    writer.write(doc.toJson());
-    writer.close();
-    return;
-}
-
 void MainWindow::setting()
 {
     CSettingDialog *dialog;
     dialog = new CSettingDialog(this);
-    int ret = dialog->exec();
+    (void) dialog->exec();
     delete dialog;
     refreshInfo();
     return;
@@ -212,5 +123,21 @@ void MainWindow::refreshInfo()
     int total = p->getSize();
     QString label = name + ":" + QString::number(total - unlearned) + "/" + QString::number(total);
     mInfoLabel->setText(label);
+    return;
+}
+
+void MainWindow::load()
+{
+    SGlobalSetting::getInstance()->initData(cWordsDataFileName);
+    SGlobalSetting::getInstance()->initSetting(cSettingFileName);
+    refreshInfo();
+    return;
+}
+
+void MainWindow::save()
+{
+    SGlobalSetting::getInstance()->saveData(cWordsDataFileName);
+    SGlobalSetting::getInstance()->saveSetting(cSettingFileName);
+    refreshInfo();
     return;
 }

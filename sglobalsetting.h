@@ -2,18 +2,23 @@
 #define SGLOBALSETTING_H
 
 #include <QJsonObject>
+#include <QJsonDocument>
+#include <QFile>
 #include "cworddataset.h"
 
 class SGlobalSetting
 {
     static SGlobalSetting *mInstance;
-    SGlobalSetting();
+    SGlobalSetting(){};
     qint32 mErrorAmount, mLastAmount, mNewAmount;
     QString mCurrentDataset;
     QMap<QString, CWordDataSet*> mDataSet;
 public:
-    static void initSetting(QJsonObject aObject);
-    static void exit();
+    void initSetting(QString filename);
+    void initData(QString filename);
+    void saveSetting(QString filename);
+    void saveData(QString filename);
+    void exit();
     QJsonObject parseToJson();
     static SGlobalSetting* getInstance() {return mInstance;}
     void setErrorAmount(qint32 aErrorAmount) {mErrorAmount = aErrorAmount;}

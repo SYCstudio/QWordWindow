@@ -24,19 +24,16 @@
 class MainWindow : public QWidget
 {
     Q_OBJECT
+    static const QString cWordsDataFileName;
+    static const QString cSettingFileName;
 
     QLabel *mInfoLabel;
     QPushButton *mStartButton, *mAddNewWordButton, *mExitButton, *mSettingButton;
     QVBoxLayout *mMainLayout;
     //CWordDataSet mWordDataSet;
     //QMap<QString, CWordDataSet*> mDataSet;
-    static const QString cWordsDataFileName;
-    static const QString cSettingFileName;
-
-    void saveData();
-    void loadData();
-    void saveSetting();
-    void loadSetting();
+    void save();
+    void load();
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
