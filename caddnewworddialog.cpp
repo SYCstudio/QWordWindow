@@ -47,7 +47,6 @@ void CAddNewWordDialog::okButtonClicked()
     mWordData->setCreateTime(QDateTime::currentDateTime());
     mWordData->setTotalCount(0);
     mWordData->setErrorCount(0);
-    mWordData->setLastTime(QDateTime::currentDateTime());
     mWordData->setPracticeTime(0);
     done(QDialog::Accepted);
 }

@@ -12,14 +12,14 @@ CWordDataSet::~CWordDataSet()
     return;
 }
 
-void CWordDataSet::parseFromJson(QJsonArray aJarray)
+void CWordDataSet::parseFromJson(QJsonArray aJarray, QString aVersion)
 {
     int size = aJarray.size();
     for (auto it :mWordMap) delete it;
     for (int i = 0; i < size; i++) {
         CWordData *p;
         p = new CWordData();
-        p->parseFromJson(aJarray[i].toObject());
+        p->parseFromJson(aJarray[i].toObject(), aVersion);
         append(p);
     }
     return;

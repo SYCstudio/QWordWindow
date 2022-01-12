@@ -102,7 +102,7 @@ void MainWindow::startNewPractice()
     }
     while (!bp.isEmpty()) {
         CWordData *p = bp.pop();
-        p->setLastTime(QDateTime::currentDateTime());
+        //p->setLastTime(QDateTime::currentDateTime());
         p->setPracticeTime(p->getPracticeCount() + 1);
     }
     refreshInfo();
@@ -132,8 +132,8 @@ void MainWindow::refreshInfo()
 
 void MainWindow::load()
 {
-    SGlobalSetting::getInstance()->initData(cWordsDataFileName);
     SGlobalSetting::getInstance()->initSetting(cSettingFileName);
+    SGlobalSetting::getInstance()->initData(cWordsDataFileName);
     SGlobalSetting::getInstance()->initFinish();
     refreshInfo();
     return;

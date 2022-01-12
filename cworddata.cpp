@@ -5,7 +5,13 @@ CWordData::CWordData()
 
 }
 
-void CWordData::parseFromJson(QJsonObject aObject)
+QDateTime CWordData::getLastTime()
+{
+    if (mPracticeQueue.isEmpty()) return mCreateTime;
+    return mPracticeQueue.back();
+}
+
+void CWordData::parseFromJson(QJsonObject aObject, QString aVersion)
 {
     mKey = aObject["key"].toString();
     mTranslation = aObject["translation"].toString();
@@ -13,9 +19,25 @@ void CWordData::parseFromJson(QJsonObject aObject)
     mCreateTime = QDateTime::fromString(stime, "yyyy-MM-dd hh:mm:ss");
     mTotalCount = aObject["total_count"].toInt();
     mErrorCount = aObject["error_count"].toInt();
-    stime = aObject["last_time"].toString();
-    mLastTime = QDateTime::fromString(stime, "yyyy-MM-dd hh:mm:ss");
+
     mPracticeCount = aObject["practice_count"].toInt();
+    if (aVersion == "0.1.0") {// upgrade from 0.1.0 to 0.1.1
+        qDebug() << "update from 0.1.0 to 0.1.1";
+        stime = aObject["last_time"].toString();
+        mPracticeQueue.append(QDateTime::fromString(stime, "yyyy-MM-dd hh:mm:ss"));
+    }
+    else {
+        QJsonArray arr = aObject["recently_practice_date"].toArray();
+        for (auto data:arr) {
+            stime = data.toString();
+            mPracticeQueue.append(QDateTime::fromString(stime, "yyyy-MM-dd hh:mm:ss"));
+        }
+        arr = aObject["recently_wrong_date"].toArray();
+        for (auto data:arr) {
+            stime = data.toString();
+            mWrongQueue.append(QDateTime::fromString(stime, "yyyy-MM-dd hh:mm:ss"));
+        }
+    }
     return;
 }
 
@@ -27,7 +49,15 @@ QJsonObject CWordData::parseToJson()
     ret["create_time"] = mCreateTime.toString("yyyy-MM-dd hh:mm:ss");
     ret["total_count"] = mTotalCount;
     ret["error_count"] = mErrorCount;
-    ret["last_time"] = mLastTime.toString("yyyy-MM-dd hh:mm:ss");
+    QJsonArray obj1, obj2;
+    for (auto data:mPracticeQueue) {
+        obj1.append(data.toString("yyyy-MM-dd hh:mm:ss"));
+    }
+    ret["recently_practice_date"] = obj1;
+    for (auto data:mWrongQueue) {
+        obj2.append(data.toString("yyyy-MM-dd hh:mm:ss"));
+    }
+    ret["recently_wrong_date"] = obj2;
     ret["practice_count"] = mPracticeCount;
     return ret;
 }

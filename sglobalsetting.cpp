@@ -1,7 +1,7 @@
 #include "sglobalsetting.h"
 
 SGlobalSetting *SGlobalSetting::mInstance = new SGlobalSetting();
-const QString SGlobalSetting::cCurrentVersion = "0.1.0";
+const QString SGlobalSetting::cCurrentVersion = "0.1.1";
 
 void SGlobalSetting::initSetting(QString filename)
 {
@@ -58,7 +58,7 @@ void SGlobalSetting::initData(QString filename)
         QString name = obj["name"].toString();
         CWordDataSet *dataset;
         dataset = new CWordDataSet();
-        dataset->parseFromJson(obj["dataset"].toArray());
+        dataset->parseFromJson(obj["dataset"].toArray(), mVersion);
         wordsbooks->insert(name, dataset);
     }
     reader.close();
