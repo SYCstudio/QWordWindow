@@ -19,8 +19,8 @@ public:
         return mArray.isEmpty() && mBufferQueue.isEmpty();
     }
     void clear() {
-        mArray.empty();
-        mBufferQueue.empty();
+        mArray.clear();
+        mBufferQueue.clear();
     }
     int getSize() {
         return mArray.size() + mBufferQueue.size();
