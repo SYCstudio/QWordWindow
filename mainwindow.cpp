@@ -134,6 +134,7 @@ void MainWindow::load()
 {
     SGlobalSetting::getInstance()->initData(cWordsDataFileName);
     SGlobalSetting::getInstance()->initSetting(cSettingFileName);
+    SGlobalSetting::getInstance()->initFinish();
     refreshInfo();
     return;
 }

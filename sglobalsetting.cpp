@@ -1,12 +1,17 @@
 #include "sglobalsetting.h"
 
 SGlobalSetting *SGlobalSetting::mInstance = new SGlobalSetting();
+const QString SGlobalSetting::cCurrentVersion = "0.1.0";
 
 void SGlobalSetting::initSetting(QString filename)
 {
     QFile reader(filename);
-    if (!reader.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug() << "can't find file";
+    if (!reader.open(QIODevice::ReadOnly | QIODevice::Text)) {//处理空情况，创建初始数据
+        setVersion(cCurrentVersion);
+        setErrorAmount(0);
+        setLastAmount(0);
+        setNewAmount(0);
+        setCurrentDataset("default");
         return;
     }
     QJsonParseError errorTag;
@@ -16,11 +21,53 @@ void SGlobalSetting::initSetting(QString filename)
         return;
     }
     auto obj = doc.object();
-    mInstance->setErrorAmount(obj["error_amount"].toInt());
-    mInstance->setLastAmount(obj["last_amount"].toInt());
-    mInstance->setNewAmount(obj["new_amount"].toInt());
-    mInstance->setCurrentDataset(obj["current_dataset_name"].toString());
+    if (obj.contains("version")) setVersion(obj["version"].toString());
+    else setVersion("0.1.0");
+    setErrorAmount(obj["error_amount"].toInt());
+    setLastAmount(obj["last_amount"].toInt());
+    setNewAmount(obj["new_amount"].toInt());
+    setCurrentDataset(obj["current_dataset_name"].toString());
     reader.close();
+    return;
+}
+
+void SGlobalSetting::initData(QString filename)
+{
+    QFile reader(filename);
+    if (!reader.open(QIODevice::ReadOnly | QIODevice::Text)) {//处理空情况，创建一个名为 default 的空单词本
+        auto wordbooks = SGlobalSetting::getInstance()->getDataset();
+        CWordDataSet *dataset = new CWordDataSet();
+        wordbooks->insert("default", dataset);
+        return;
+    }
+    QJsonParseError errorTag;
+    QJsonDocument doc = QJsonDocument::fromJson(reader.readAll(), &errorTag);
+    if (doc.isNull() || errorTag.error != QJsonParseError::NoError) {
+        qDebug() << "parse error";
+        return;
+    }
+    //qDebug() << doc.isArray();
+    //mWordDataSet.parseFromJson(doc.array());
+
+    QMap<QString, CWordDataSet*>* wordsbooks = SGlobalSetting::getInstance()->getDataset();
+
+    QJsonArray arr = doc.array();
+    int size = arr.size();
+    for (int i = 0; i < size; i++) {
+        QJsonObject obj = arr[i].toObject();
+        QString name = obj["name"].toString();
+        CWordDataSet *dataset;
+        dataset = new CWordDataSet();
+        dataset->parseFromJson(obj["dataset"].toArray());
+        wordsbooks->insert(name, dataset);
+    }
+    reader.close();
+    return;
+}
+
+void SGlobalSetting::initFinish()
+{
+    mVersion = cCurrentVersion;
     return;
 }
 
@@ -39,10 +86,11 @@ void SGlobalSetting::saveSetting(QString filename)
         return;
     }
     QJsonObject obj;
-    obj["error_amount"] = mInstance->getErrorAmount();
-    obj["last_amount"] = mInstance->getLastAmount();
-    obj["new_amount"] = mInstance->getNewAmount();
-    obj["current_dataset_name"] = mInstance->getCurrentDataset();
+    obj["version"] = getVersion();
+    obj["error_amount"] = getErrorAmount();
+    obj["last_amount"] = getLastAmount();
+    obj["new_amount"] = getNewAmount();
+    obj["current_dataset_name"] = getCurrentDataset();
     QJsonDocument doc;
     doc.setObject(obj);
     writer.write(doc.toJson());
@@ -71,37 +119,5 @@ void SGlobalSetting::saveData(QString filename)
     doc.setArray(arr);
     writer.write(doc.toJson());
     writer.close();
-    return;
-}
-
-void SGlobalSetting::initData(QString filename)
-{
-    QFile reader(filename);
-    if (!reader.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug() << "can't find file";
-        return;
-    }
-    QJsonParseError errorTag;
-    QJsonDocument doc = QJsonDocument::fromJson(reader.readAll(), &errorTag);
-    if (doc.isNull() || errorTag.error != QJsonParseError::NoError) {
-        qDebug() << "parse error";
-        return;
-    }
-    //qDebug() << doc.isArray();
-    //mWordDataSet.parseFromJson(doc.array());
-
-    QMap<QString, CWordDataSet*>* wordsbooks = SGlobalSetting::getInstance()->getDataset();
-
-    QJsonArray arr = doc.array();
-    int size = arr.size();
-    for (int i = 0; i < size; i++) {
-        QJsonObject obj = arr[i].toObject();
-        QString name = obj["name"].toString();
-        CWordDataSet *dataset;
-        dataset = new CWordDataSet();
-        dataset->parseFromJson(obj["dataset"].toArray());
-        wordsbooks->insert(name, dataset);
-    }
-    reader.close();
     return;
 }
