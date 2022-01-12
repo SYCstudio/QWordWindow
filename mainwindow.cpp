@@ -137,6 +137,7 @@ void MainWindow::startNewPractice()
                 SGlobalSetting::getInstance()->getErrorAmount(),
                 SGlobalSetting::getInstance()->getLastAmount()),
             bp = queue;
+    queue.forceMove();
     while (!queue.isEmpty()) {
         CWordData* p = queue.pop();
         CPracticeDialog *dialog;
