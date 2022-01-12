@@ -11,11 +11,13 @@ MainWindow::MainWindow(QWidget *parent)
     mAddNewWordButton = new QPushButton();
     mExitButton = new QPushButton();
     mSettingButton = new QPushButton();
+    mSaveButton = new QPushButton();
 
     mStartButton -> setText(tr("start"));
     mAddNewWordButton -> setText(tr("add"));
     mExitButton -> setText(tr("exit"));
     mSettingButton -> setText(tr("setting"));
+    mSaveButton -> setText(tr("save"));
 
     mInfoLabel = new QLabel();
 
@@ -23,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
     mMainLayout->addWidget(mStartButton);
     mMainLayout->addWidget(mAddNewWordButton);
     mMainLayout->addWidget(mSettingButton);
+    mMainLayout->addWidget(mSaveButton);
     mMainLayout->addWidget(mExitButton);
     setLayout(mMainLayout);
 
@@ -32,6 +35,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(mAddNewWordButton, SIGNAL(clicked()), this, SLOT(addNewWord()));
     connect(mStartButton, SIGNAL(clicked()), this, SLOT(startNewPractice()));
     connect(mSettingButton, SIGNAL(clicked()), this, SLOT(setting()));
+    connect(mSaveButton, SIGNAL(clicked()), this, SLOT(save()));
 
     load();
     return;

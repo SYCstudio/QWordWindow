@@ -28,12 +28,10 @@ class MainWindow : public QWidget
     static const QString cSettingFileName;
 
     QLabel *mInfoLabel;
-    QPushButton *mStartButton, *mAddNewWordButton, *mExitButton, *mSettingButton;
+    QPushButton *mStartButton, *mAddNewWordButton, *mExitButton, *mSettingButton, *mSaveButton;
     QVBoxLayout *mMainLayout;
     //CWordDataSet mWordDataSet;
     //QMap<QString, CWordDataSet*> mDataSet;
-    void save();
-    void load();
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
@@ -43,5 +41,7 @@ private slots:
     void startNewPractice();
     void setting();
     void refreshInfo();
+    void save();
+    void load();
 };
 #endif // MAINWINDOW_H
