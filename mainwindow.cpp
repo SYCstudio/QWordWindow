@@ -31,6 +31,7 @@ MainWindow::MainWindow(QWidget *parent)
     setLayout(mMainLayout);
 
     setWindowTitle(tr("QWordWindow"));
+    setFixedWidth(150);
 
     connect(mExitButton, SIGNAL(clicked()), this, SLOT(leaveApp()));
     connect(mAddNewWordButton, SIGNAL(clicked()), this, SLOT(addNewWord()));

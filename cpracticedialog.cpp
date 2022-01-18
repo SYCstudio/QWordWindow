@@ -29,6 +29,7 @@ CPracticeDialog::CPracticeDialog(QWidget *parent, CWordData *aWorddata, QString 
                     mWorddata->getKey());
     mTranslationLabel->setText(info);
     mTranslationLabel->setVisible(false);
+    mTranslationLabel->setWordWrap(true);
 
     mLayout->addWidget(mKeyLabel, 0, 0, 1, 4);
     mLayout->addWidget(mInfoLabel, 1, 0, 1, 4);
@@ -40,6 +41,7 @@ CPracticeDialog::CPracticeDialog(QWidget *parent, CWordData *aWorddata, QString 
     setLayout(mLayout);
 
     setWindowTitle(aTitle);
+    setFixedWidth(300);
 
     connect(mOkButton, SIGNAL(clicked()), this, SLOT(okButtonClicked()));
     connect(mForgetButton, SIGNAL(clicked()), this, SLOT(forgetButtonClicked()));

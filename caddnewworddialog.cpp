@@ -13,6 +13,7 @@ CAddNewWordDialog::CAddNewWordDialog(QWidget *parrent, CWordData *aWordData)
     mCancelButton = new QPushButton(tr("Cancel"));
     mDictChecker = new QCheckBox(tr("from dict:"));
 
+    mDictInfo->setWordWrap(true);
     mDictChecker->setCheckState(Qt::Checked);
     mAdditionChecker->setCheckState(Qt::Unchecked);
 
@@ -26,6 +27,8 @@ CAddNewWordDialog::CAddNewWordDialog(QWidget *parrent, CWordData *aWordData)
     mLayout->addWidget(mCancelButton, 3, 1);
 
     setLayout(mLayout);
+
+    setFixedWidth(300);
 
     connect(mOkButton, SIGNAL(clicked()), this, SLOT(okButtonClicked()));
     connect(mCancelButton, SIGNAL(clicked()), this, SLOT(cancelButtonClicked()));
@@ -47,6 +50,9 @@ CAddNewWordDialog::~CAddNewWordDialog()
 
 void CAddNewWordDialog::okButtonClicked()
 {
+    //qDebug() << mDictChecker->isChecked() << mAdditionChecker->isChecked();
+    if (!mDictChecker->isChecked() && !mAdditionChecker->isChecked())
+        done(QDialog::Rejected);
     mWordData->setKey(mKeyEdit->text());
     mWordData->setUseDictInfo(mDictChecker->isChecked());
     mWordData->setUseAddition(mAdditionChecker->isChecked());
