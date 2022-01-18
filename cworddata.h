@@ -30,12 +30,18 @@ public:
     qint32 getErrorCount() {return mErrorCount;}
     QDateTime getLastTime();
     qint32 getPracticeCount() {return mPracticeCount;}
+    qint32 getDayWrongCount(int mDay);
+    qint32 getDayWrongCount(int mLower, int mUpper);
+    qint32 getDayCount(int mDay);
+    qint32 getDayCount(int mLower, int mUpper);
     void setKey(QString aKey) {mKey = aKey;}
     void setTranslation(QString aTranslation) {mTranslation = aTranslation;}
     void setCreateTime(QDateTime aCreateTime) {mCreateTime = aCreateTime;}
     void setTotalCount(qint32 aTotalCount) {mTotalCount = aTotalCount;}
     void setErrorCount(qint32 aErrorCount) {mErrorCount = aErrorCount;}
     void setPracticeTime(qint32 aPracticeCount) {mPracticeCount = aPracticeCount;}
+    void appendPracticeDate(QDateTime aTime) {mPracticeQueue.append(aTime);}
+    void appendWrongDate(QDateTime aTime) {mWrongQueue.append(aTime);}
     static bool cmpByKey(CWordData a, CWordData b);
     static bool cmpByErrorRate(CWordData a, CWordData b);
     static bool cmpByPracticeTime(CWordData a, CWordData b);

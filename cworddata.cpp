@@ -105,3 +105,37 @@ bool CWordData::cmpByLastDate(CWordData a, CWordData b)
 {
     return cmpByLastDatep(&a, &b);
 }
+
+qint32 CWordData::getDayWrongCount(int mDay)
+{
+    return getDayWrongCount(mDay, mDay);
+}
+
+qint32 CWordData::getDayWrongCount(int mLower, int mUpper)
+{
+    qint32 ret = 0;
+    auto today = QDateTime::currentDateTime();
+    for (auto t:mWrongQueue) {
+        qint32 day = t.daysTo(today);
+        if (day >= mLower && day <= mUpper)
+            ret++;
+    }
+    return ret;
+}
+
+qint32 CWordData::getDayCount(int mDay)
+{
+    return getDayCount(mDay, mDay);
+}
+
+qint32 CWordData::getDayCount(int mLower, int mUpper)
+{
+    qint32 ret = 0;
+    auto today = QDateTime::currentDateTime();
+    for (auto t:mPracticeQueue) {
+        qint32 day = t.daysTo(today);
+        if (day >= mLower && day <= mUpper)
+            ret++;
+    }
+    return ret;
+}

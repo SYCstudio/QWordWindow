@@ -78,19 +78,21 @@ void MainWindow::addNewWord()
 
 void MainWindow::startNewPractice()
 {
-    CRandomQueue<CWordData*> queue = SGlobalSetting::getInstance()->getDataset()
+    QSet<CWordData*> set = SGlobalSetting::getInstance()->getDataset()
             ->find(SGlobalSetting::getInstance()->getCurrentDataset()).value()->getWordsByArg(
                 SGlobalSetting::getInstance()->getNewAmount(),
                 SGlobalSetting::getInstance()->getErrorAmount(),
                 SGlobalSetting::getInstance()->getLastAmount()),
-            bp = queue;
+            errorset;
+    CRandomQueue<CWordData*> queue;
+    for (auto it:set) queue.append(it);
     queue.forceMove();
     while (!queue.isEmpty()) {
         CWordData* p = queue.pop();
         CPracticeDialog *dialog;
         dialog = new CPracticeDialog(this, p,
-                                     QString::number(bp.getSize() - queue.getSize())
-                                     + "/" + QString::number(bp.getSize()));
+                                     QString::number(set.size() - queue.getSize())
+                                     + "/" + QString::number(set.size()));
         int ret = dialog->exec();
         delete dialog;
         if (ret == QDialog::Rejected) return;
@@ -98,12 +100,16 @@ void MainWindow::startNewPractice()
         if (ret == 3) {
             p->setErrorCount(p->getErrorCount() + 1);
             queue.append(p);
+            errorset.insert(p);
         }
     }
-    while (!bp.isEmpty()) {
-        CWordData *p = bp.pop();
-        //p->setLastTime(QDateTime::currentDateTime());
-        p->setPracticeTime(p->getPracticeCount() + 1);
+    auto currentTime = QDateTime::currentDateTime();
+    for (auto it:set) {
+        it->setPracticeTime(it->getPracticeCount() + 1);
+        it->appendPracticeDate(currentTime);
+    }
+    for (auto it:errorset) {
+        it->appendWrongDate(currentTime);
     }
     refreshInfo();
     return;
