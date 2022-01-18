@@ -2,6 +2,7 @@
 
 const QString MainWindow::cWordsDataFileName = "words_data.json";
 const QString MainWindow::cSettingFileName = "setting.json";
+const QString MainWindow::cDictFileName = "dict.db";
 
 MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent)
@@ -141,6 +142,7 @@ void MainWindow::load()
     SGlobalSetting::getInstance()->initSetting(cSettingFileName);
     SGlobalSetting::getInstance()->initData(cWordsDataFileName);
     SGlobalSetting::getInstance()->initFinish();
+    SGlobalSetting::getInstance()->initDict(cDictFileName);
     refreshInfo();
     return;
 }

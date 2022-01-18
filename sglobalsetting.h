@@ -4,6 +4,9 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QFile>
+#include <QSqlDatabase>
+#include <QSqlError>
+#include <QSqlQuery>
 #include "cworddataset.h"
 
 class SGlobalSetting
@@ -14,9 +17,11 @@ class SGlobalSetting
     qint32 mErrorAmount, mLastAmount, mNewAmount;
     QString mCurrentDataset, mVersion;
     QMap<QString, CWordDataSet*> mDataSet;
+    QSqlDatabase mDict;
 public:
     void initSetting(QString filename);
     void initData(QString filename);
+    void initDict(QString filename);
     void initFinish();
     void saveSetting(QString filename);
     void saveData(QString filename);
@@ -34,6 +39,7 @@ public:
     QString getCurrentDataset() {return mCurrentDataset;}
     QString getVersion() {return mVersion;}
     QMap<QString, CWordDataSet*> * getDataset() {return &mDataSet;}
+    QString findInDict(QString aWord);
 };
 
 #endif // SGLOBALSETTING_H

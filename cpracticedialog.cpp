@@ -22,7 +22,12 @@ CPracticeDialog::CPracticeDialog(QWidget *parent, CWordData *aWorddata, QString 
     mInfoLabel->setText(mWorddata->getLastTime().toString("yyyy-MM-dd hh:mm:ss") + " ("
                         + QString::number(mWorddata->getTotalCount() - mWorddata->getErrorCount()) + "/"
                         + QString::number(mWorddata->getTotalCount()) + ")");
-    mTranslationLabel->setText(mWorddata->getTranslation());
+    QString info;
+    if (mWorddata->getUseAddtion()) info += mWorddata->getAddition();
+    if (mWorddata->getUseDictInfo())
+        info += SGlobalSetting::getInstance()->findInDict(
+                    mWorddata->getKey());
+    mTranslationLabel->setText(info);
     mTranslationLabel->setVisible(false);
 
     mLayout->addWidget(mKeyLabel, 0, 0, 1, 4);

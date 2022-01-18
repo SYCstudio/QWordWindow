@@ -26,6 +26,7 @@ class MainWindow : public QWidget
     Q_OBJECT
     static const QString cWordsDataFileName;
     static const QString cSettingFileName;
+    static const QString cDictFileName;
 
     QLabel *mInfoLabel;
     QPushButton *mStartButton, *mAddNewWordButton, *mExitButton, *mSettingButton, *mSaveButton;

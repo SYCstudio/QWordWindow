@@ -4,8 +4,9 @@
 #include <QDialog>
 #include <QPushButton>
 #include <QLabel>
-#include "cworddata.h"
 #include <QGridLayout>
+#include "cworddata.h"
+#include "sglobalsetting.h"
 
 class CPracticeDialog : public QDialog
 {

@@ -65,6 +65,29 @@ void SGlobalSetting::initData(QString filename)
     return;
 }
 
+void SGlobalSetting::initDict(QString filename)
+{
+    //qDebug() << filename;
+    mDict = QSqlDatabase::addDatabase("QSQLITE");
+    mDict.setDatabaseName(filename);
+    if (mDict.open() == false) {
+        qDebug() << "Error: can't open database";
+        return;
+    }
+    /*
+    qDebug() << "Dict load ok";
+    QSqlQuery sql_query;
+    sql_query.exec("SELECT id, word, definition, translation FROM stardict where word = \"hello\";");
+    while (sql_query.next()) {
+        int id = sql_query.value(0).toInt();
+        QString word = sql_query.value(1).toString();
+        QString definition = sql_query.value(2).toString();
+        QString translation = sql_query.value(3).toString();
+        qDebug() << id << word << definition << translation;
+    }
+    //*/
+}
+
 void SGlobalSetting::initFinish()
 {
     mVersion = cCurrentVersion;
@@ -120,4 +143,34 @@ void SGlobalSetting::saveData(QString filename)
     writer.write(doc.toJson());
     writer.close();
     return;
+}
+
+QString SGlobalSetting::findInDict(QString aWord)
+{
+    const QString cq1("SELECT * FROM stardict where word = \'"), cq2("\';");
+    QSqlQuery sql_query;
+    sql_query.exec(cq1 + aWord + cq2);
+    if (sql_query.next()) {
+        QString phonetic = sql_query.value(3).toString();
+        QString definition ;//= sql_query.value(4).toString();
+        QString translation = sql_query.value(5).toString();
+        QString exchange = sql_query.value(12).toString();
+        QString merged;
+        if (!phonetic.isEmpty())
+            merged += "\\" + phonetic + "\\";
+        if (!translation.isEmpty()) {
+            if (!merged.isEmpty()) merged += "\n";
+            merged += translation;
+        }
+        if (!definition.isEmpty()) {
+            if (!merged.isEmpty()) merged += "\n";
+            merged += definition;
+        }
+        if (!exchange.isEmpty()) {
+            if (!merged.isEmpty()) merged += "\n";
+            merged += exchange;
+        }
+        return merged;
+    }
+    return "";
 }

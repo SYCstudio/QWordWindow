@@ -14,7 +14,6 @@ QDateTime CWordData::getLastTime()
 void CWordData::parseFromJson(QJsonObject aObject, QString aVersion)
 {
     mKey = aObject["key"].toString();
-    mTranslation = aObject["translation"].toString();
     QString stime = aObject["create_time"].toString();
     mCreateTime = QDateTime::fromString(stime, "yyyy-MM-dd hh:mm:ss");
     mTotalCount = aObject["total_count"].toInt();
@@ -25,8 +24,15 @@ void CWordData::parseFromJson(QJsonObject aObject, QString aVersion)
         qDebug() << "update from 0.1.0 to 0.1.1";
         stime = aObject["last_time"].toString();
         mPracticeQueue.append(QDateTime::fromString(stime, "yyyy-MM-dd hh:mm:ss"));
+        mUseDictInfo = false;
+        mAddition = aObject["translation"].toString();
+        mUseAddition = true;
     }
     else {
+        mUseDictInfo = aObject["use_dict_info"].toInt();
+        mUseAddition = aObject["use_addition"].toInt();
+        if (mUseAddition)
+            mAddition = aObject["addition"].toString();
         QJsonArray arr = aObject["recently_practice_date"].toArray();
         for (auto data:arr) {
             stime = data.toString();
@@ -45,10 +51,13 @@ QJsonObject CWordData::parseToJson()
 {
     QJsonObject ret;
     ret["key"] = mKey;
-    ret["translation"] = mTranslation;
+    ret["use_addition"] = mUseAddition;
+    if (mUseAddition)
+        ret["addition"] = mAddition;
     ret["create_time"] = mCreateTime.toString("yyyy-MM-dd hh:mm:ss");
     ret["total_count"] = mTotalCount;
     ret["error_count"] = mErrorCount;
+    ret["use_dict_info"] = mUseDictInfo;
     QJsonArray obj1, obj2;
     for (auto data:mPracticeQueue) {
         obj1.append(data.toString("yyyy-MM-dd hh:mm:ss"));
